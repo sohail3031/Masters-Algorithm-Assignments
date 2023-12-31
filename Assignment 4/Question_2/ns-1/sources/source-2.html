@@ -1,0 +1,278 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > Question_2</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: Question_2 (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Question_2</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (5/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    83.3%
+  </span>
+  <span class="absValue">
+    (75/90)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.util.*;
+&nbsp;
+<b class="nc">&nbsp;public class Question_2 {</b>
+<b class="fc">&nbsp;    public static int minSum = Integer.MAX_VALUE;</b>
+&nbsp;    public static int maxPossibleSum;
+<b class="fc">&nbsp;    public static int minMaxSum = Integer.MAX_VALUE;</b>
+&nbsp;    public static int[] optimalDivision;
+&nbsp;
+&nbsp;    public static void main(String[] args) {
+<b class="fc">&nbsp;        Scanner scanner = new Scanner(System.in);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Enter the number of elements in the list: &quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        int size = scanner.nextInt();</b>
+<b class="fc">&nbsp;        int[] numbers = new int[size];</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; size; i++) {</b>
+<b class="fc">&nbsp;            System.out.println(&quot;Enter number &quot; + (i + 1));</b>
+<b class="fc">&nbsp;            numbers[i] = scanner.nextInt();</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Enter the value of k: &quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        int k = scanner.nextInt();</b>
+&nbsp;
+<b class="fc">&nbsp;        int[] sortedArr = numbers.clone();</b>
+<b class="fc">&nbsp;        int[] reversedArr = new int[size];</b>
+&nbsp;
+<b class="fc">&nbsp;        Arrays.sort(sortedArr);</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int j = 0; j &lt; size; j++) {</b>
+<b class="fc">&nbsp;            reversedArr[j] = sortedArr[size - j - 1];</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int total = 0;</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int num : numbers) {</b>
+<b class="fc">&nbsp;            total += num;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        int[] sums = new int[k];</b>
+<b class="fc">&nbsp;        int[] division = new int[size];</b>
+&nbsp;
+<b class="fc">&nbsp;        Arrays.fill(division, -1);</b>
+&nbsp;
+&nbsp;        long startTime, endTime, duration;
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Running the brute force branch and bound algorithm on the test case: &quot; + Arrays.toString(numbers) + &quot; with k = &quot; + k);</b>
+&nbsp;
+<b class="fc">&nbsp;        startTime = System.nanoTime();</b>
+&nbsp;
+<b class="fc">&nbsp;        bruteForceBranchAndBound(numbers, 0, sums, division, 0, k);</b>
+&nbsp;
+<b class="fc">&nbsp;        endTime = System.nanoTime();</b>
+<b class="fc">&nbsp;        duration = endTime - startTime;</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;The minimum maximum sum is: &quot; + minMaxSum);</b>
+&nbsp;
+<b class="fc">&nbsp;        printDivision(numbers, optimalDivision);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;The execution time is: &quot; + duration + &quot; nanoseconds.&quot;);</b>
+<b class="fc">&nbsp;        System.out.println();</b>
+&nbsp;
+<b class="fc">&nbsp;        Arrays.fill(sums, 0);</b>
+<b class="fc">&nbsp;        Arrays.fill(division, -1);</b>
+&nbsp;
+<b class="fc">&nbsp;        maxPossibleSum = total;</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Running the backtracking algorithm with heuristics on the test case: &quot; + Arrays.toString(numbers) + &quot; with k = &quot; + k);</b>
+&nbsp;
+<b class="fc">&nbsp;        startTime = System.nanoTime();</b>
+&nbsp;
+<b class="fc">&nbsp;        backtrackWithHeuristics(reversedArr, 0, sums, division, 0, k);</b>
+&nbsp;
+<b class="fc">&nbsp;        endTime = System.nanoTime();</b>
+<b class="fc">&nbsp;        duration = endTime - startTime;</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;The minimum maximum sum is: &quot; + minMaxSum);</b>
+&nbsp;
+<b class="fc">&nbsp;        printDivision(numbers, optimalDivision);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;The execution time is: &quot; + duration + &quot; nanoseconds.&quot;);</b>
+<b class="fc">&nbsp;        System.out.println();</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void backtrackWithHeuristics(int[] arr, int index, int[] sums, int[] division, int maxSum, int k) {
+<b class="fc">&nbsp;        if (index == arr.length) {</b>
+<b class="nc">&nbsp;            if (maxSum &lt; minMaxSum) {</b>
+<b class="nc">&nbsp;                minMaxSum = maxSum;</b>
+<b class="nc">&nbsp;                optimalDivision = division.clone();</b>
+<b class="nc">&nbsp;                minSum = Integer.MAX_VALUE;</b>
+&nbsp;
+<b class="nc">&nbsp;                for (int sum : sums) {</b>
+<b class="nc">&nbsp;                    minSum = Math.min(minSum, sum);</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (maxSum &gt; minMaxSum || maxSum + maxPossibleSum &gt; minMaxSum - minSum) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="nc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;            sums[i] += arr[index];</b>
+<b class="nc">&nbsp;            division[index] = i;</b>
+<b class="nc">&nbsp;            maxPossibleSum -= arr[index];</b>
+&nbsp;
+<b class="nc">&nbsp;            backtrackWithHeuristics(arr, index + 1, sums, division, Math.max(maxSum, sums[i]), k);</b>
+&nbsp;
+<b class="nc">&nbsp;            sums[i] -= arr[index];</b>
+<b class="nc">&nbsp;            division[index] = -1;</b>
+<b class="nc">&nbsp;            maxPossibleSum += arr[index];</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void printDivision(int[] arr, int[] division) {
+<b class="fc">&nbsp;        int k = Arrays.stream(division).max().orElse(0) + 1;</b>
+<b class="fc">&nbsp;        List&lt;List&lt;Integer&gt;&gt; subsets = new ArrayList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="fc">&nbsp;            subsets.add(new ArrayList&lt;&gt;());</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; division.length; i++) {</b>
+<b class="fc">&nbsp;            subsets.get(division[i]).add(arr[i]);</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (List&lt;Integer&gt; subset : subsets) {</b>
+<b class="fc">&nbsp;            if (!subset.isEmpty()) {</b>
+<b class="fc">&nbsp;                int sum = subset.stream().mapToInt(Integer::intValue).sum();</b>
+&nbsp;
+<b class="fc">&nbsp;                StringJoiner joiner = new StringJoiner(&quot; + &quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                for (int num : subset) {</b>
+<b class="fc">&nbsp;                    joiner.add(Integer.toString(num));</b>
+<b class="fc">&nbsp;                }</b>
+&nbsp;
+<b class="fc">&nbsp;                System.out.println(joiner + &quot; = &quot; + sum);</b>
+&nbsp;            }
+<b class="fc">&nbsp;        }</b>
+&nbsp;
+<b class="fc">&nbsp;        int maxFavour = subsets.stream()</b>
+<b class="fc">&nbsp;                .mapToInt(subset -&gt; subset.stream().mapToInt(Integer::intValue).sum())</b>
+<b class="fc">&nbsp;                .max().orElse(0);</b>
+&nbsp;
+<b class="fc">&nbsp;        System.out.println(&quot;Favour = &quot; + maxFavour);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void bruteForceBranchAndBound(int[] arr, int index, int[] sums, int[] division, int maxSum, int k) {
+<b class="fc">&nbsp;        if (index == arr.length) {</b>
+<b class="fc">&nbsp;            if (maxSum &lt; minMaxSum) {</b>
+<b class="fc">&nbsp;                minMaxSum = maxSum;</b>
+<b class="fc">&nbsp;                optimalDivision = division.clone();</b>
+&nbsp;            }
+&nbsp;
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        if (maxSum &gt; minMaxSum) {</b>
+&nbsp;            return;
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="fc">&nbsp;            sums[i] += arr[index];</b>
+<b class="fc">&nbsp;            division[index] = i;</b>
+&nbsp;
+<b class="fc">&nbsp;            bruteForceBranchAndBound(arr, index + 1, sums, division, Math.max(maxSum, Math.min(sums[i], minMaxSum)), k);</b>
+&nbsp;
+<b class="fc">&nbsp;            sums[i] -= arr[index];</b>
+<b class="fc">&nbsp;            division[index] = -1;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-17 18:31</div>
+</div>
+</body>
+</html>

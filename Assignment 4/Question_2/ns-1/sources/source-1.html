@@ -1,0 +1,326 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <title>Coverage Report > A</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">&lt;empty package name&gt;</a>
+</div>
+
+<h1>Coverage Summary for Class: A (&lt;empty package name&gt;)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">A</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/6)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    0%
+  </span>
+  <span class="absValue">
+    (0/104)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;import java.util.*;
+&nbsp;import java.io.*;
+&nbsp;
+<b class="nc">&nbsp;public class A {</b>
+&nbsp;
+&nbsp;    // A utility function to print the solution
+&nbsp;    static void printSolution(int[] list, int[] assign, int k) {
+<b class="nc">&nbsp;        int[] sums = new int[k]; // the sums of each subset</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;            System.out.print(&quot;Subset &quot; + (i + 1) + &quot; = {&quot;);</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt; list.length; j++) {</b>
+<b class="nc">&nbsp;                if (assign[j] == i) {</b>
+<b class="nc">&nbsp;                    System.out.print(list[j] + &quot; &quot;);</b>
+<b class="nc">&nbsp;                    sums[i] += list[j];</b>
+&nbsp;                }
+&nbsp;            }
+<b class="nc">&nbsp;            System.out.println(&quot;}&quot;);</b>
+&nbsp;        }
+&nbsp;        // find the maximum sum among the subsets
+<b class="nc">&nbsp;        int max = 0;</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;            if (sums[i] &gt; max) {</b>
+<b class="nc">&nbsp;                max = sums[i];</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;        // print the favour
+<b class="nc">&nbsp;        System.out.println(&quot;Favour = &quot; + max);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // A recursive function to check if there exists a partition of the given list into k subsets with minimum favour
+&nbsp;    // Returns true if a partition is possible and fills assign with the subset assignments
+&nbsp;    // list: the given list of integers
+&nbsp;    // n: the length of the list
+&nbsp;    // assign: an array to store the subset assignments for each element
+&nbsp;    // k: the number of subsets
+&nbsp;    // level: the current level of recursion
+&nbsp;    // best: the best favour found so far
+&nbsp;    static boolean partition(int[] list, int n, int[] assign, int k, int level, int best) {
+&nbsp;        // Base case: if all elements are assigned, check the favour
+<b class="nc">&nbsp;        if (level == n) {</b>
+<b class="nc">&nbsp;            int[] sums = new int[k]; // the sums of each subset</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; n; i++) {</b>
+<b class="nc">&nbsp;                sums[assign[i]] += list[i];</b>
+&nbsp;            }
+&nbsp;            // find the maximum sum among the subsets
+<b class="nc">&nbsp;            int max = 0;</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;                if (sums[i] &gt; max) {</b>
+<b class="nc">&nbsp;                    max = sums[i];</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // update the best favour if needed
+<b class="nc">&nbsp;            if (max &lt; best) {</b>
+<b class="nc">&nbsp;                best = max;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Try assigning the current element to each subset
+<b class="nc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;            assign[level] = i;</b>
+&nbsp;            // calculate the bound for the current assignment
+<b class="nc">&nbsp;            int bound = 0;</b>
+<b class="nc">&nbsp;            int[] sums = new int[k]; // the sums of each subset</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt;= level; j++) {</b>
+<b class="nc">&nbsp;                sums[assign[j]] += list[j];</b>
+&nbsp;            }
+&nbsp;            // find the maximum sum among the subsets
+<b class="nc">&nbsp;            int max = 0;</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt; k; j++) {</b>
+<b class="nc">&nbsp;                if (sums[j] &gt; max) {</b>
+<b class="nc">&nbsp;                    max = sums[j];</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // add the remaining elements to the bound
+<b class="nc">&nbsp;            for (int j = level + 1; j &lt; n; j++) {</b>
+<b class="nc">&nbsp;                bound += list[j];</b>
+&nbsp;            }
+&nbsp;            // divide the bound by k and add to the max
+<b class="nc">&nbsp;            bound = (int) Math.ceil((double) bound / k) + max;</b>
+&nbsp;            // if the bound is better than the best, continue the recursion
+<b class="nc">&nbsp;            if (bound &lt; best) {</b>
+<b class="nc">&nbsp;                if (partition(list, n, assign, k, level + 1, best)) {</b>
+<b class="nc">&nbsp;                    return true;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // otherwise, backtrack and try another assignment
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // A heuristic function to check if there exists a partition of the given list into k subsets with minimum favour
+&nbsp;    // Returns true if a partition is possible and fills assign with the subset assignments
+&nbsp;    // The heuristic is to sort the list in descending order and try the larger elements first
+&nbsp;    static boolean partitionHeuristic(int[] list, int n, int[] assign, int k, int level, int best) {
+&nbsp;        // Base case: if all elements are assigned, check the favour
+<b class="nc">&nbsp;        if (level == n) {</b>
+<b class="nc">&nbsp;            int[] sums = new int[k]; // the sums of each subset</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; n; i++) {</b>
+<b class="nc">&nbsp;                sums[assign[i]] += list[i];</b>
+&nbsp;            }
+&nbsp;            // find the maximum sum among the subsets
+<b class="nc">&nbsp;            int max = 0;</b>
+<b class="nc">&nbsp;            for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;                if (sums[i] &gt; max) {</b>
+<b class="nc">&nbsp;                    max = sums[i];</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // update the best favour if needed
+<b class="nc">&nbsp;            if (max &lt; best) {</b>
+<b class="nc">&nbsp;                best = max;</b>
+&nbsp;            }
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Try assigning the current element to each subset
+<b class="nc">&nbsp;        for (int i = 0; i &lt; k; i++) {</b>
+<b class="nc">&nbsp;            assign[level] = i;</b>
+&nbsp;            // calculate the bound for the current assignment
+<b class="nc">&nbsp;            int bound = 0;</b>
+<b class="nc">&nbsp;            int[] sums = new int[k]; // the sums of each subset</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt;= level; j++) {</b>
+<b class="nc">&nbsp;                sums[assign[j]] += list[j];</b>
+&nbsp;            }
+&nbsp;            // find the maximum sum among the subsets
+<b class="nc">&nbsp;            int max = 0;</b>
+<b class="nc">&nbsp;            for (int j = 0; j &lt; k; j++) {</b>
+<b class="nc">&nbsp;                if (sums[j] &gt; max) {</b>
+<b class="nc">&nbsp;                    max = sums[j];</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // add the remaining elements to the bound
+<b class="nc">&nbsp;            for (int j = level + 1; j &lt; n; j++) {</b>
+<b class="nc">&nbsp;                bound += list[j];</b>
+&nbsp;            }
+&nbsp;            // divide the bound by k and add to the max
+<b class="nc">&nbsp;            bound = (int) Math.ceil((double) bound / k) + max;</b>
+&nbsp;            // if the bound is better than the best, continue the recursion
+<b class="nc">&nbsp;            if (bound &lt; best) {</b>
+<b class="nc">&nbsp;                if (partitionHeuristic(list, n, assign, k, level + 1, best)) {</b>
+<b class="nc">&nbsp;                    return true;</b>
+&nbsp;                }
+&nbsp;            }
+&nbsp;            // otherwise, backtrack and try another assignment
+&nbsp;        }
+<b class="nc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    // A function to compare the running time of the brute force and heuristic algorithms
+&nbsp;    static void compareTime(int[] list, int n, int k) {
+&nbsp;        // Create an empty array for brute force algorithm
+<b class="nc">&nbsp;        int[] assign = new int[n];</b>
+&nbsp;
+&nbsp;        // Record the start time of brute force algorithm
+<b class="nc">&nbsp;        long startTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;        // Call the brute force algorithm
+<b class="nc">&nbsp;        boolean result = partition(list, n, assign, k, 0, Integer.MAX_VALUE);</b>
+&nbsp;
+&nbsp;        // Record the end time of brute force algorithm
+<b class="nc">&nbsp;        long endTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;        // Calculate the time difference in milliseconds
+<b class="nc">&nbsp;        long timeDiff = (endTime - startTime) / 1000000;</b>
+&nbsp;
+&nbsp;        // Print the result and time of brute force algorithm
+<b class="nc">&nbsp;        System.out.println(&quot;Brute force algorithm:&quot;);</b>
+<b class="nc">&nbsp;        if (result) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;A partition is possible.&quot;);</b>
+<b class="nc">&nbsp;            printSolution(list, assign, k);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            System.out.println(&quot;A partition is not possible.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println(&quot;Time taken: &quot; + timeDiff + &quot; ms&quot;);</b>
+&nbsp;
+&nbsp;        // Create an empty array for heuristic algorithm
+<b class="nc">&nbsp;        int[] assign2 = new int[n];</b>
+&nbsp;
+&nbsp;        // Sort the list in descending order
+<b class="nc">&nbsp;        Arrays.sort(list);</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; n / 2; i++) {</b>
+<b class="nc">&nbsp;            int temp = list[i];</b>
+<b class="nc">&nbsp;            list[i] = list[n - i - 1];</b>
+<b class="nc">&nbsp;            list[n - i - 1] = temp;</b>
+&nbsp;        }
+&nbsp;
+&nbsp;        // Record the start time of heuristic algorithm
+<b class="nc">&nbsp;        startTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;        // Call the heuristic algorithm
+<b class="nc">&nbsp;        result = partitionHeuristic(list, n, assign2, k, 0, Integer.MAX_VALUE);</b>
+&nbsp;
+&nbsp;        // Record the end time of heuristic algorithm
+<b class="nc">&nbsp;        endTime = System.nanoTime();</b>
+&nbsp;
+&nbsp;        // Calculate the time difference in milliseconds
+<b class="nc">&nbsp;        timeDiff = (endTime - startTime) / 1000000;</b>
+&nbsp;
+&nbsp;        // Print the result and time of heuristic algorithm
+<b class="nc">&nbsp;        System.out.println(&quot;Heuristic algorithm:&quot;);</b>
+<b class="nc">&nbsp;        if (result) {</b>
+<b class="nc">&nbsp;            System.out.println(&quot;A partition is possible.&quot;);</b>
+<b class="nc">&nbsp;            printSolution(list, assign2, k);</b>
+&nbsp;        } else {
+<b class="nc">&nbsp;            System.out.println(&quot;A partition is not possible.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        System.out.println(&quot;Time taken: &quot; + timeDiff + &quot; ms&quot;);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public static void main(String[] args) throws IOException {
+&nbsp;        // Read the input from standard input
+<b class="nc">&nbsp;        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));</b>
+<b class="nc">&nbsp;        int n = Integer.parseInt(br.readLine());</b>
+<b class="nc">&nbsp;        int[] list = new int[n];</b>
+<b class="nc">&nbsp;        for (int i = 0; i &lt; n; i++) {</b>
+<b class="nc">&nbsp;            list[i] = Integer.parseInt(br.readLine());</b>
+&nbsp;        }
+<b class="nc">&nbsp;        int k = Integer.parseInt(br.readLine());</b>
+&nbsp;
+&nbsp;        // Call the compareTime function to compare the running time of the two algorithms
+<b class="nc">&nbsp;        compareTime(list, n, k);</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2023-12-17 18:31</div>
+</div>
+</body>
+</html>
